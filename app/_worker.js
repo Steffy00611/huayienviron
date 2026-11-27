@@ -453,6 +453,8 @@ function layout({ title, desc, path, body, initJs = "", lang = "en", alternates 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(title)}</title>
+<meta name="google-site-verification" content="Kn95hW4G1N1unlr2QP7OqGe2PEoBocskYHHm846RdrA">
+<meta name="yandex-verification" content="0ec58505e3de9ca4">
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${SITE}${path}">
 ${alt}
@@ -674,14 +676,14 @@ ${more}
   });
 }
 function sitemapXml(products, posts) {
-  // 仅以下页面的 ru/es 版本真实存在；其余页面只收录英文版，避免 sitemap 出现 404 死链
-  const i18nPages = ["get-a-solution", "contact-us"];
-  const enI18nPages = [
+  const i18nPages = [
     "",
     "products",
     "products-wastewater-treatment",
     "products-solid-liquid-separation",
-    "products-waste-incineration"
+    "products-waste-incineration",
+    "get-a-solution",
+    "contact-us"
   ];
   const enOnlyPages = [
     "services",
@@ -702,8 +704,6 @@ function sitemapXml(products, posts) {
   const langs = [["en", ""], ["ru", "/ru"], ["es", "/es"]];
   const altLinks = (enP) => langs.map(([code, pre]) => `    <xhtml:link rel="alternate" hreflang="${code}" href="${SITE}${pre}${enP}"/>`).join("\n") + `
     <xhtml:link rel="alternate" hreflang="x-default" href="${SITE}${enP}"/>`;
-  const altLinksEn = (enP) => `    <xhtml:link rel="alternate" hreflang="en" href="${SITE}${enP}"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE}${enP}"/>`;
   const urls = [];
   const pushI18n = (enP) => {
     for (const [, pre] of langs) {
@@ -713,15 +713,8 @@ ${altLinks(enP)}
   </url>`);
     }
   };
-  const pushEn = (enP) => {
-    urls.push(`  <url>
-    <loc>${SITE}${enP}</loc>
-${altLinksEn(enP)}
-  </url>`);
-  };
-  for (const p of i18nPages) pushI18n(`/${p}`);
-  for (const p of enI18nPages) pushEn(p ? `/${p}` : "/");
-  for (const p of products) pushEn(`/product-${esc(p.slug)}`);
+  for (const p of i18nPages) pushI18n(p ? `/${p}` : "/");
+  for (const p of products) pushI18n(`/product-${esc(p.slug)}`);
   for (const p of enOnlyPages) urls.push(`  <url><loc>${SITE}/${p}</loc></url>`);
   for (const b of posts) urls.push(`  <url><loc>${SITE}/blog-${esc(b.slug)}</loc></url>`);
   return `<?xml version="1.0" encoding="UTF-8"?>
