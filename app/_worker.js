@@ -455,6 +455,7 @@ function layout({ title, desc, path, body, initJs = "", lang = "en", alternates 
 <title>${esc(title)}</title>
 <meta name="google-site-verification" content="Kn95hW4G1N1unlr2QP7OqGe2PEoBocskYHHm846RdrA">
 <meta name="yandex-verification" content="0ec58505e3de9ca4">
+<meta name="yandex-verification" content="58b3118a11f371">
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${SITE}${path}">
 ${alt}
